@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -45,7 +47,24 @@ public class BreathWatchApp {
     }
 }
 
-// PatientView class updated to handle RespiratoryData
+// Custom JPanel for rendering the background image
+class BackgroundPanel extends JPanel {
+    private final String imagePath;
+
+    public BackgroundPanel(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics); // Ensure proper rendering
+        ImageIcon img = new ImageIcon(imagePath);
+        Image i = img.getImage();
+        graphics.drawImage(i, 0, 0, this);
+    }
+}
+
+// PatientView class updated to handle RespiratoryData and background
 class PatientView implements MonitoringView {
     private RespiratoryData respiratoryData;
 
@@ -71,6 +90,13 @@ class PatientView implements MonitoringView {
     }
 
     private void render() {
+        JFrame frame = new JFrame("Patient View");
+        BackgroundPanel panel = new BackgroundPanel("BkgndImg.jpg"); // Path to the image
+        frame.add(panel);
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
         System.out.println("Displaying data for Patient:");
         Iterator<Double> iterator = respiratoryData.iterator();
         while (iterator.hasNext()) {
@@ -79,7 +105,7 @@ class PatientView implements MonitoringView {
     }
 }
 
-// ClinicianView class updated to handle RespiratoryData
+// ClinicianView class updated to handle RespiratoryData and background
 class ClinicianView implements MonitoringView {
     private RespiratoryData respiratoryData;
 
@@ -105,6 +131,13 @@ class ClinicianView implements MonitoringView {
     }
 
     private void render() {
+        JFrame frame = new JFrame("Clinician View");
+        BackgroundPanel panel = new BackgroundPanel("BkgndImg.jpg"); // Path to the image
+        frame.add(panel);
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+
         System.out.println("Displaying data for Clinician:");
         Iterator<Double> iterator = respiratoryData.iterator();
         while (iterator.hasNext()) {
@@ -118,4 +151,5 @@ interface MonitoringView {
     void gatherData();
     void formatData();
 }
+
 
