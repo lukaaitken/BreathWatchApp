@@ -1,4 +1,4 @@
-public class DataConnection {
+class DataConnection {
     private static DataConnection instance;
 
     private DataConnection() {
@@ -13,7 +13,6 @@ public class DataConnection {
     }
 
     public void connect() {
-        // Connection logic
         System.out.println("Connected to the data source.");
     }
 }
