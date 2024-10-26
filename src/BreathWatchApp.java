@@ -91,7 +91,7 @@ class PatientView implements MonitoringView {
 
     private void render() {
         JFrame frame = new JFrame("Patient View");
-        BackgroundPanel panel = new BackgroundPanel("BkgndImg.jpg"); // Path to the image
+        BackgroundPanel panel = new BackgroundPanel("PatientImage.png"); // Path to the image
         frame.add(panel);
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -132,7 +132,7 @@ class ClinicianView implements MonitoringView {
 
     private void render() {
         JFrame frame = new JFrame("Clinician View");
-        BackgroundPanel panel = new BackgroundPanel("BkgndImg.jpg"); // Path to the image
+        BackgroundPanel panel = new BackgroundPanel("DoctorImage.png"); // Path to the image
         frame.add(panel);
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
