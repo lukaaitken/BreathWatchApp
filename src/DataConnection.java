@@ -1,3 +1,4 @@
+// Singleton class for DataConnection
 class DataConnection {
     private static DataConnection instance;
 

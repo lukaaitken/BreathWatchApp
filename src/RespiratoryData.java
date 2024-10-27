@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class RespiratoryData {
+// RespiratoryData class
+class RespiratoryData implements Iterable<Double> {
     private final ArrayList<Double> breathingRates;
 
     public RespiratoryData() {
@@ -12,6 +13,11 @@ public class RespiratoryData {
         breathingRates.add(rate);
     }
 
+    public void clearBreathingRates() {
+        breathingRates.clear();
+    }
+
+    @Override
     public Iterator<Double> iterator() {
         return breathingRates.iterator();
     }
