@@ -1,9 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 // Main application class
 public class BreathWatchApp {
@@ -59,6 +62,11 @@ class User {
 abstract class HealthFrame extends JFrame {
     public HealthFrame() {
         setTitle("Health Monitoring System"); // Set title for the frame
+
+        // Load the icon image
+        ImageIcon icon = new ImageIcon("BreathWatchLogo.png");
+        setIconImage(icon.getImage()); // Set the icon image
+
         setPreferredSize(new Dimension(900, 800)); // Set preferred size
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close operation
     }
