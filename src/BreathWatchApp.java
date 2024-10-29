@@ -79,7 +79,7 @@ abstract class HealthFrame extends JFrame {
     protected abstract void drawBackground(Graphics graphics);
 }
 
-// Clinician Frame
+// Clinician Frame (Template Pattern)
 class ClinicianFrame extends HealthFrame {
     private RespiratoryData data;
 
@@ -113,7 +113,7 @@ class ClinicianFrame extends HealthFrame {
     }
 }
 
-// Patient Frame
+// Patient Frame (Template Pattern)
 class PatientFrame extends HealthFrame {
     private RespiratoryData data;
 
