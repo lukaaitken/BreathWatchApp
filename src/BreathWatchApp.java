@@ -61,7 +61,7 @@ class User {
 // Abstract HealthFrame class for the Template Pattern
 abstract class HealthFrame extends JFrame {
     public HealthFrame() {
-        setTitle("Health Monitoring System"); // Set title for the frame
+        setTitle("BreathWatch"); // Set title for the frame
 
         // Load the icon image
         ImageIcon icon = new ImageIcon("BreathWatchLogo.png");
