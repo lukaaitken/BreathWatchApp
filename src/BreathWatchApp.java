@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import forms.LoginForm;
 
 // Main application class
 public class BreathWatchApp {
@@ -32,8 +33,10 @@ public class BreathWatchApp {
             System.out.println("Invalid role. Exiting.");
             return;
         }
-
+        LoginForm loginForm = new LoginForm();
         frame.display(); // Display the selected frame
+
+
     }
 
     // Simulate breathing rates for the data
