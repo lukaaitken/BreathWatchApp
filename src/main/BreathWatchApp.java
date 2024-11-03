@@ -3,6 +3,8 @@ package main;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import forms.LoginForm;
 
 public class BreathWatchApp {
@@ -125,36 +127,102 @@ class ClinicianFrame extends HealthFrame {
     }
 }
 
-// Patient Frame (Template Pattern)
+
 class PatientFrame extends HealthFrame {
     private RespiratoryData data;
+    private JTextArea symptomInput; // Text area for symptom input
+    private JButton submitButton; // Button to submit symptoms
+    private JPanel dataPanel; // Panel for data and user input
+    private BackgroundPanel backgroundPanel; // Panel for background image
 
     public PatientFrame(RespiratoryData data) {
         this.data = data; // Initialize respiratory data
+        initializeUI(); // Set up UI components
     }
 
+    private void initializeUI() {
+        // Create the background panel
+        backgroundPanel = new BackgroundPanel();
+        backgroundPanel.setLayout(new BorderLayout()); // Use BorderLayout for better control
+
+        // Create a panel for the data and user input
+        dataPanel = new JPanel();
+        dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS)); // Vertical stacking for data panel
+
+        // Create and set up the symptom input area
+        symptomInput = new JTextArea(5, 30); // 5 rows, 30 columns
+        symptomInput.setLineWrap(true); // Allow line wrapping
+        symptomInput.setWrapStyleWord(true); // Wrap on word boundaries
+
+        // Wrap JTextArea in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(symptomInput);
+        scrollPane.setPreferredSize(new Dimension(300, 100)); // Set preferred size for the scroll pane
+
+        // Create the submit button
+        submitButton = new JButton("Submit Symptoms");
+        submitButton.setPreferredSize(new Dimension(150, 30)); // Set a preferred size for the button
+
+        // Set up action listener for the button
+        submitButton.addActionListener(e -> submitSymptoms());
+
+        // Add components to the data panel
+        displayData(dataPanel); // Add breathing data to the panel
+        dataPanel.add(Box.createVerticalGlue()); // Push components to the bottom
+        dataPanel.add(new JLabel("Enter your symptoms:")); // Add a label for better UX
+        dataPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between label and text area
+        dataPanel.add(scrollPane); // Add the scroll pane containing the text area
+        dataPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between text area and button
+        dataPanel.add(submitButton);
+
+        // Add both panels to the main frame
+        backgroundPanel.add(dataPanel, BorderLayout.CENTER); // Add data panel to the center
+        this.add(backgroundPanel); // Add background panel to the frame
+        this.pack(); // Resize frame to fit components
+        this.setVisible(true); // Make the frame visible
+    }
+
+    private void submitSymptoms() {
+        String symptoms = symptomInput.getText();
+        // Process the symptoms input (e.g., save to a file, send to server)
+        System.out.println("Symptoms submitted: " + symptoms);
+        symptomInput.setText(""); // Clear the input area
+    }
+
+    // Override the drawBackground method from HealthFrame
     @Override
     protected void drawBackground(Graphics graphics) {
-        ImageIcon img = new ImageIcon("src\\images\\PatientImage.png");
-        if (img.getImageLoadStatus() != MediaTracker.COMPLETE) {
-            graphics.setColor(Color.RED);
-            graphics.drawString("Error loading patient image!", 50, 50);
-            return;
-        }
-        Image i = img.getImage();
-        graphics.drawImage(i, 0, 0, this); // Draw background image
-        graphics.setColor(Color.CYAN); // Set text colour
-        graphics.drawString("Welcome Patient!", 50, 50); // Display welcome message
-        displayData(graphics); // Display breathing data
+        // This method might not be needed anymore since the background is handled in BackgroundPanel
+        backgroundPanel.repaint(); // Request a repaint for the background panel
     }
 
-    // Display breathing rates on the frame
-    private void displayData(Graphics graphics) {
-        int y = 100; // Start Y position for text
-        Iterator<Double> iterator = data.iterator();
-        while (iterator.hasNext()) {
-            graphics.drawString("Breathing Rate: " + iterator.next(), 50, y); // Display each rate
-            y += 20; // Move down for the next line
+    // Custom panel to draw the background image
+    private class BackgroundPanel extends JPanel {
+        private Image backgroundImage;
+
+        public BackgroundPanel() {
+            backgroundImage = new ImageIcon("src/images/PatientImage.png").getImage();
+            setLayout(new OverlayLayout(this)); // Use OverlayLayout to stack components
         }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this); // Draw background image
+        }
+    }
+
+    // Display breathing rates on the provided panel
+    private void displayData(JPanel breathingRatePanel) {
+        breathingRatePanel.removeAll(); // Clear previous entries
+        if (data != null && data.iterator().hasNext()) { // Check if data is not null and has elements
+            Iterator<Double> iterator = data.iterator();
+            while (iterator.hasNext()) {
+                breathingRatePanel.add(new JLabel("Breathing Rate: " + iterator.next())); // Add labels to panel
+            }
+        } else {
+            breathingRatePanel.add(new JLabel("No breathing rates available.")); // Inform user if no data is available
+        }
+        breathingRatePanel.revalidate(); // Refresh the panel to show new data
+        breathingRatePanel.repaint(); // Repaint the panel
     }
 }
