@@ -64,7 +64,7 @@ abstract class HealthFrame extends JFrame {
         setTitle("BreathWatch"); // Set title for the frame
 
         // Load the icon image
-        ImageIcon icon = new ImageIcon("Images\\BreathWatchLogo2.png");
+        ImageIcon icon = new ImageIcon("src\\images\\BreathWatchLogo2.png");
         setIconImage(icon.getImage()); // Set the icon image
 
         setPreferredSize(new Dimension(900, 800)); // Set preferred size
@@ -97,7 +97,7 @@ class ClinicianFrame extends HealthFrame {
 
     @Override
     protected void drawBackground(Graphics graphics) {
-        ImageIcon img = new ImageIcon("Images\\DoctorImage.png");
+        ImageIcon img = new ImageIcon("src\\images\\DoctorImage.png");
         if (img.getImageLoadStatus() != MediaTracker.COMPLETE) {
             graphics.setColor(Color.RED);
             graphics.drawString("Error loading clinician image!", 50, 50);
@@ -131,7 +131,7 @@ class PatientFrame extends HealthFrame {
 
     @Override
     protected void drawBackground(Graphics graphics) {
-        ImageIcon img = new ImageIcon("Images\\PatientImage.png");
+        ImageIcon img = new ImageIcon("src\\images\\PatientImage.png");
         if (img.getImageLoadStatus() != MediaTracker.COMPLETE) {
             graphics.setColor(Color.RED);
             graphics.drawString("Error loading patient image!", 50, 50);
