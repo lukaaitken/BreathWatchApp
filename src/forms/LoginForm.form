@@ -14,7 +14,7 @@
           <grid row="0" column="0" row-span="5" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <background color="-16694940"/>
+          <background color="-13527669"/>
           <enabled value="true"/>
         </properties>
         <border type="none"/>
@@ -26,7 +26,7 @@
             <properties>
               <font name="MS Outlook" size="18" style="1"/>
               <foreground color="-394241"/>
-              <text value="WELCOME"/>
+              <text value="BREATHWATCH"/>
             </properties>
           </component>
         </children>
@@ -60,7 +60,7 @@
             </constraints>
             <properties>
               <font name="MS Outlook" size="14" style="1"/>
-              <text value="BreathWatch"/>
+              <text value="Welcome to BreathWatch"/>
             </properties>
           </component>
         </children>
