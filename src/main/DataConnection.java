@@ -1,4 +1,5 @@
 // Singleton class for DataConnection
+package main;
 class DataConnection {
     private static DataConnection instance;
 

@@ -1,74 +1,75 @@
+package main;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
-import java.util.List;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.net.URL;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import java.util.Iterator;
 import forms.LoginForm;
 
-// Main application class
 public class BreathWatchApp {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter role (patient/clinician): ");
-        String role = scanner.nextLine().trim().toLowerCase();
+        // Set up the application icon in the taskbar
+        JFrame frame = new JFrame();
+        ImageIcon icon = new ImageIcon("src/images/BreathWatchLogo2.png");
+        frame.setIconImage(icon.getImage());
 
+        // Show login form
+        LoginForm loginForm = new LoginForm(frame);
+        User authenticatedUser = loginForm.getAuthenticatedUser();
+
+        // Exit if authentication fails
+        if (authenticatedUser == null) {
+            System.out.println("Authentication failed. Exiting application.");
+            System.exit(0);
+        }
+
+        String role = authenticatedUser.getUserType(); // Get the user type
         RespiratoryData data = new RespiratoryData();
         DataConnection connection = DataConnection.getInstance();
         connection.connect();
         simulateBreathingRates(data);
 
-        User user = new User(role); // Create User object
-        HealthFrame frame;
+        HealthFrame healthFrame;
 
         // Determine which frame to display based on user role
-        if (user.getUserType().equals("patient")) {
-            frame = new PatientFrame(data);
-        } else if (user.getUserType().equals("clinician")) {
-            frame = new ClinicianFrame(data);
+        if ("patient".equals(role)) {
+            healthFrame = new PatientFrame(data);
+        } else if ("clinician".equals(role)) {
+            healthFrame = new ClinicianFrame(data);
         } else {
             System.out.println("Invalid role. Exiting.");
             return;
         }
-        LoginForm loginForm = new LoginForm();
-        frame.display(); // Display the selected frame
 
-
+        healthFrame.display(); // Display the selected frame
+        frame.dispose(); // Dispose of the initial frame
     }
 
-    // Simulate breathing rates for the data
     private static void simulateBreathingRates(RespiratoryData data) {
         for (int i = 0; i < 10; i++) {
             double rate = 15 + Math.random() * 10;
             data.addBreathingRate(rate); // Add generated rate to the data
         }
     }
-}
 
-// User class to represent user type
-class User {
-    private String userType; // "Clinician" or "Patient"
+    public static class User {
+        private String userType;
 
-    public User(String userType) {
-        this.userType = userType; // Initialize user type
-    }
+        public User(String userType) {
+            this.userType = userType;
+        }
 
-    public String getUserType() {
-        return userType; // Return user type
+        public String getUserType() {
+            return userType;
+        }
     }
 }
 
 // Abstract HealthFrame class for the Template Pattern
 abstract class HealthFrame extends JFrame {
     public HealthFrame() {
-        setTitle("BreathWatch"); // Set title for the frame
-
-        // Load the icon image
+        setTitle("BreathWatch");
         ImageIcon icon = new ImageIcon("src\\images\\BreathWatchLogo2.png");
-        setIconImage(icon.getImage()); // Set the icon image
+        setIconImage(icon.getImage());
 
         setPreferredSize(new Dimension(900, 800)); // Set preferred size
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close operation
