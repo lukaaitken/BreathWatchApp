@@ -1,11 +1,9 @@
 package main;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.Iterator;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import forms.LoginForm;
+import forms.PatientFrame;
+import forms.ClinicianFrame;
 
 public class BreathWatchApp {
     public static void main(String[] args) {
@@ -25,18 +23,18 @@ public class BreathWatchApp {
         }
 
         String role = authenticatedUser.getUserType(); // Get the user type
-        RespiratoryData data = new RespiratoryData();
+        VitalSignsData data = new VitalSignsData(); // Use VitalSignsData
         DataConnection connection = DataConnection.getInstance();
         connection.connect();
-        simulateBreathingRates(data);
+        simulateVitalSigns(data); // Simulate both breathing rates and heart rates
 
         HealthFrame healthFrame;
 
         // Determine which frame to display based on user role
         if ("patient".equals(role)) {
-            healthFrame = new PatientFrame(data);
+            healthFrame = new PatientFrame(data); // Pass data to PatientFrame
         } else if ("clinician".equals(role)) {
-            healthFrame = new ClinicianFrame(data);
+            healthFrame = new ClinicianFrame(data); // Pass data to ClinicianFrame
         } else {
             System.out.println("Invalid role. Exiting.");
             return;
@@ -46,10 +44,13 @@ public class BreathWatchApp {
         frame.dispose(); // Dispose of the initial frame
     }
 
-    private static void simulateBreathingRates(RespiratoryData data) {
+    private static void simulateVitalSigns(VitalSignsData data) {
         for (int i = 0; i < 10; i++) {
-            double rate = 15 + Math.random() * 10;
-            data.addBreathingRate(rate); // Add generated rate to the data
+            double breathingRate = 15 + Math.random() * 10; // Simulate a breathing rate
+            data.addBreathingRate(breathingRate); // Add to VitalSignsData
+
+            double heartRate = 60 + Math.random() * 40; // Simulate a heart rate
+            data.addHeartRate(heartRate); // Add to VitalSignsData
         }
     }
 
@@ -66,39 +67,112 @@ public class BreathWatchApp {
     }
 }
 
-// Abstract HealthFrame class for the Template Pattern
-abstract class HealthFrame extends JFrame {
-    public HealthFrame() {
-        setTitle("BreathWatch");
-        ImageIcon icon = new ImageIcon("src\\images\\BreathWatchLogo2.png");
-        setIconImage(icon.getImage());
 
-        setPreferredSize(new Dimension(900, 800)); // Set preferred size
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close operation
+
+/*
+class ClinicianFrame extends HealthFrame {
+    private VitalSignsData data;
+    private JPanel vitalSignsPanel;
+    private JPanel alertsPanel;
+    private JTextArea symptomsLog;
+    private JLabel connectionStatusLabel;
+
+    public ClinicianFrame(VitalSignsData data) {
+        this.data = data;
+        initializeUI();
     }
 
-    // Template method to display the frame
-    public final void display() {
-        pack(); // Adjusts the frame size based on preferred size
-        this.setVisible(true); // Make frame visible
+    private void initializeUI() {
+        this.setLayout(new BorderLayout());
+
+        // Panel for real-time vital signs display
+        vitalSignsPanel = new JPanel();
+        vitalSignsPanel.setLayout(new BoxLayout(vitalSignsPanel, BoxLayout.Y_AXIS));
+        displayVitalSigns(vitalSignsPanel);
+
+        // Panel for alerts and warnings
+        alertsPanel = new JPanel();
+        alertsPanel.setLayout(new BoxLayout(alertsPanel, BoxLayout.Y_AXIS));
+        displayAlerts();
+
+        // Log for submitted symptoms
+        symptomsLog = new JTextArea(10, 30); // Display up to 10 lines of logged symptoms
+        symptomsLog.setEditable(false); // Make log read-only for the clinician
+        JScrollPane scrollPane = new JScrollPane(symptomsLog);
+
+        // Connection status label
+        connectionStatusLabel = new JLabel("Connection: Active");
+
+        // Add components to main layout
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BorderLayout());
+        leftPanel.add(vitalSignsPanel, BorderLayout.CENTER);
+        leftPanel.add(alertsPanel, BorderLayout.SOUTH);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BorderLayout());
+        rightPanel.add(new JLabel("Symptoms Log"), BorderLayout.NORTH);
+        rightPanel.add(scrollPane, BorderLayout.CENTER);
+        rightPanel.add(connectionStatusLabel, BorderLayout.SOUTH);
+
+        this.add(leftPanel, BorderLayout.CENTER);
+        this.add(rightPanel, BorderLayout.EAST);
+        this.pack();
+        this.setVisible(true);
+    }
+
+    // Display the vital signs in real time
+    private void displayVitalSigns(JPanel panel) {
+        panel.removeAll();
+        panel.add(new JLabel("Breathing Rate: " + data.getLatestBreathingRate()));
+        panel.add(new JLabel("Heart Rate: " + data.getLatestHeartRate()));
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    // Display alerts based on threshold breaches
+    private void displayAlerts() {
+        alertsPanel.removeAll();
+        if (data.isBreathingRateCritical()) {
+            JLabel alertLabel = new JLabel("Critical Breathing Rate Alert!");
+            alertLabel.setForeground(Color.RED);
+            alertsPanel.add(alertLabel);
+        }
+        if (data.isHeartRateCritical()) {
+            JLabel alertLabel = new JLabel("Critical Heart Rate Alert!");
+            alertLabel.setForeground(Color.RED);
+            alertsPanel.add(alertLabel);
+        }
+        alertsPanel.revalidate();
+        alertsPanel.repaint();
+    }
+
+    // Method to update symptoms log with new symptoms from the patient
+    public void updateSymptomsLog(String symptom) {
+        symptomsLog.append(symptom + "\n"); // Append each symptom entry with a new line
+        symptomsLog.setCaretPosition(symptomsLog.getDocument().getLength()); // Auto-scroll to the latest entry
+    }
+
+    // Method to update the connection status
+    public void updateConnectionStatus(boolean isConnected) {
+        connectionStatusLabel.setText("Connection: " + (isConnected ? "Active" : "Inactive"));
+        connectionStatusLabel.setForeground(isConnected ? Color.GREEN : Color.RED);
     }
 
     @Override
-    public void paint(Graphics graphics) {
-        super.paint(graphics); // Call superclass's paint method
-        drawBackground(graphics); // Draw specific background
+    protected void drawBackground(Graphics graphics) {
+        // Custom background drawing if needed
     }
-
-    // Abstract method for drawing background, to be implemented by subclasses
-    protected abstract void drawBackground(Graphics graphics);
 }
+*/
 
+/*
 // Clinician Frame (Template Pattern)
 class ClinicianFrame extends HealthFrame {
-    private RespiratoryData data;
+    private VitalSignsData data; // Change to VitalSignsData
 
-    public ClinicianFrame(RespiratoryData data) {
-        this.data = data; // Initialize respiratory data
+    public ClinicianFrame(VitalSignsData data) {
+        this.data = data; // Initialize vital signs data
     }
 
     @Override
@@ -113,30 +187,36 @@ class ClinicianFrame extends HealthFrame {
         graphics.drawImage(i, 0, 0, this); // Draw background image
         graphics.setColor(Color.BLACK); // Set text color
         graphics.drawString("Welcome Clinician!", 50, 50); // Display welcome message
-        displayData(graphics); // Display breathing data
+        displayData(graphics); // Display vital signs data
     }
 
-    // Display breathing rates on the frame
+    // Display vital signs on the frame
     private void displayData(Graphics graphics) {
         int y = 100; // Start Y position for text
-        Iterator<Double> iterator = data.iterator();
-        while (iterator.hasNext()) {
-            graphics.drawString("Breathing Rate: " + iterator.next(), 50, y); // Display each rate
+        Iterator<Double> breathingIterator = data.iterator();
+        while (breathingIterator.hasNext()) {
+            graphics.drawString("Breathing Rate: " + breathingIterator.next(), 50, y); // Display each breathing rate
+            y += 20; // Move down for the next line
+        }
+        Iterator<Double> heartRateIterator = data.getHeartRates().iterator(); // Get heart rates
+        while (heartRateIterator.hasNext()) {
+            graphics.drawString("Heart Rate: " + heartRateIterator.next(), 50, y); // Display each heart rate
             y += 20; // Move down for the next line
         }
     }
 }
+*/
 
-
+/*
 class PatientFrame extends HealthFrame {
-    private RespiratoryData data;
+    private VitalSignsData data; // Change to VitalSignsData
     private JTextArea symptomInput; // Text area for symptom input
     private JButton submitButton; // Button to submit symptoms
     private JPanel dataPanel; // Panel for data and user input
     private BackgroundPanel backgroundPanel; // Panel for background image
 
-    public PatientFrame(RespiratoryData data) {
-        this.data = data; // Initialize respiratory data
+    public PatientFrame(VitalSignsData data) {
+        this.data = data; // Initialize vital signs data
         initializeUI(); // Set up UI components
     }
 
@@ -166,7 +246,7 @@ class PatientFrame extends HealthFrame {
         submitButton.addActionListener(e -> submitSymptoms());
 
         // Add components to the data panel
-        displayData(dataPanel); // Add breathing data to the panel
+        displayData(dataPanel); // Add vital signs data to the panel
         dataPanel.add(Box.createVerticalGlue()); // Push components to the bottom
         dataPanel.add(new JLabel("Enter your symptoms:")); // Add a label for better UX
         dataPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add space between label and text area
@@ -191,7 +271,6 @@ class PatientFrame extends HealthFrame {
     // Override the drawBackground method from HealthFrame
     @Override
     protected void drawBackground(Graphics graphics) {
-        // This method might not be needed anymore since the background is handled in BackgroundPanel
         backgroundPanel.repaint(); // Request a repaint for the background panel
     }
 
@@ -211,18 +290,23 @@ class PatientFrame extends HealthFrame {
         }
     }
 
-    // Display breathing rates on the provided panel
+    // Display vital signs data on the provided panel
     private void displayData(JPanel breathingRatePanel) {
         breathingRatePanel.removeAll(); // Clear previous entries
-        if (data != null && data.iterator().hasNext()) { // Check if data is not null and has elements
-            Iterator<Double> iterator = data.iterator();
-            while (iterator.hasNext()) {
-                breathingRatePanel.add(new JLabel("Breathing Rate: " + iterator.next())); // Add labels to panel
+        if (data != null) {
+            Iterator<Double> breathingIterator = data.iterator();
+            while (breathingIterator.hasNext()) {
+                breathingRatePanel.add(new JLabel("Breathing Rate: " + breathingIterator.next())); // Add labels for breathing rates
+            }
+            Iterator<Double> heartRateIterator = data.getHeartRates().iterator();
+            while (heartRateIterator.hasNext()) {
+                breathingRatePanel.add(new JLabel("Heart Rate: " + heartRateIterator.next())); // Add labels for heart rates
             }
         } else {
-            breathingRatePanel.add(new JLabel("No breathing rates available.")); // Inform user if no data is available
+            breathingRatePanel.add(new JLabel("No vital signs available.")); // Inform user if no data is available
         }
         breathingRatePanel.revalidate(); // Refresh the panel to show new data
         breathingRatePanel.repaint(); // Repaint the panel
     }
 }
+*/
