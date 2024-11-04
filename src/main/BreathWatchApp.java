@@ -41,7 +41,7 @@ public class BreathWatchApp {
         }
 
         healthFrame.display(); // Display the selected frame
-        frame.dispose(); // Dispose of the initial frame
+        frame.dispose();
     }
 
     private static void simulateVitalSigns(VitalSignsData data) {
