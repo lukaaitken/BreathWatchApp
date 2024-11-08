@@ -7,7 +7,9 @@ public abstract class HealthFrame extends JFrame {
     // Constructor
     public HealthFrame() {
         // Set up the frame properties
-        setTitle("Health Monitoring System");
+        setTitle("Clinician Page - BreathWatch");
+        ImageIcon icon = new ImageIcon("src/images/BreathWatchLogo2.png");
+        setIconImage(icon.getImage());
         //setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setLocationRelativeTo(null); // Center the frame on the screen

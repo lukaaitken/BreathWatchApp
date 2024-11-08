@@ -13,7 +13,9 @@ public class ClinicianFrame extends HealthFrame {
     public ClinicianFrame(VitalSignsData vitalSignsData) {
         super(); // Call the parent constructor
         initComponents(); // Initialize GUI components
-
+       // ImageIcon icon = new ImageIcon("src/images/BreathWatchLogo2.png");
+       // setIconImage(icon.getImage());
+        setSize(900, 700);
         // Logic for fetching and displaying patient data
         fetchPatientData(vitalSignsData);
     }
