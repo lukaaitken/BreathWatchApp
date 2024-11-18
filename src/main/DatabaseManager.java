@@ -1,59 +1,51 @@
 package main;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement; // Import for PreparedStatement
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.swing.JTextArea;
+import java.sql.*;
 
 public class DatabaseManager {
-    private Connection connect() {
-        // SQLite connection string
-        String url = "jdbc:sqlite:your_database_file.db"; // Replace with your actual database file path
+    private static final String DB_URL = "jdbc:sqlite:sample.db"; // Path to your SQLite database
+
+    // Method to create a database connection
+    public Connection connect() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(DB_URL); // Connect to the SQLite database
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return conn;
     }
 
-    // Method to insert patient data into the database
-    public void insertPatientData(String patientID, String symptoms, double breathingRate, double heartRate) {
-        String sql = "INSERT INTO Patients(patientID, symptoms, breathingRate, heartRate) VALUES(?, ?, ?, ?)";
-        try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) { // Using PreparedStatement
-            pstmt.setString(1, patientID);
-            pstmt.setString(2, symptoms);
-            pstmt.setDouble(3, breathingRate);
-            pstmt.setDouble(4, heartRate);
-            pstmt.executeUpdate();
+    // Method to create the PatientData table (if not already created)
+    public void createTable() {
+        String sql = "CREATE TABLE IF NOT EXISTS PatientData (" +
+                "patient_id TEXT PRIMARY KEY," +
+                "symptoms TEXT," +
+                "breathing_rate REAL," +
+                "heart_rate REAL);";
+
+        try (Connection conn = connect(); Statement stmt = conn.createStatement()) {
+            stmt.execute(sql); // Execute the table creation query
+            System.out.println("PatientData table created (if it didn't exist).");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    // Method to fetch patient data and display it in a JTextArea
-    public void fetchPatientData(JTextArea textArea) {
-        String sql = "SELECT * FROM Patients"; // Adjust the SQL query as needed
-        try (Connection conn = this.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            StringBuilder data = new StringBuilder(); // Use StringBuilder for efficient string concatenation
-            while (rs.next()) {
-                data.append("Patient ID: ").append(rs.getString("patientID"))
-                        .append(", Symptoms: ").append(rs.getString("symptoms"))
-                        .append(", Breathing Rate: ").append(rs.getDouble("breathingRate"))
-                        .append(", Heart Rate: ").append(rs.getDouble("heartRate"))
-                        .append(", Timestamp: ").append(rs.getString("timestamp"))
-                        .append("\n");
-            }
-            textArea.setText(data.toString()); // Set the fetched data to the JTextArea
+    // Method to insert patient data into the PatientData table
+    public void insertPatientData(String patientId, String symptoms, double breathingRate, double heartRate) {
+        String sql = "INSERT INTO PatientData (patient_id, symptoms, breathing_rate, heart_rate) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, patientId);
+            pstmt.setString(2, symptoms);
+            pstmt.setDouble(3, breathingRate);
+            pstmt.setDouble(4, heartRate);
+
+            pstmt.executeUpdate(); // Execute the insert statement
+            System.out.println("Patient data inserted successfully.");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

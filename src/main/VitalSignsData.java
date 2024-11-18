@@ -4,35 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VitalSignsData {
-    private List<Double> breathingRates;
-    private List<Double> heartRates;
+    private List<Double> breathingRates = new ArrayList<>();
+    private List<Double> heartRates = new ArrayList<>();
 
-    // Constructor
-    public VitalSignsData() {
-        breathingRates = new ArrayList<>();
-        heartRates = new ArrayList<>();
-    }
-
-    // Method to add a breathing rate
-    public void addBreathingRate(double rate) {
-        breathingRates.add(rate);
-    }
-
-    // Method to add a heart rate
-    public void addHeartRate(double rate) {
-        heartRates.add(rate);
-    }
-
-    // Method to get all breathing rates
     public List<Double> getBreathingRates() {
         return breathingRates;
     }
 
-    // Method to get all heart rates
+    public void addBreathingRate(double rate) {
+        breathingRates.add(rate);
+    }
+
     public List<Double> getHeartRates() {
         return heartRates;
     }
+
+    public void addHeartRate(double rate) {
+        heartRates.add(rate);
+    }
 }
+
 
 
 

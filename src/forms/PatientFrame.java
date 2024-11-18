@@ -1,6 +1,92 @@
 package forms;
 
 import main.HealthFrame;
+import main.VitalSignsData;
+import main.DatabaseManager;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class PatientFrame extends HealthFrame {
+
+    private JTextField patientIdField; // Field for patient ID
+    private JTextField symptomsField; // Field for symptoms
+    private JTextField breathingRateField; // Field for breathing rate
+    private JTextField heartRateField; // Field for heart rate
+    private JButton submitButton; // Button for submitting data
+    private JButton generateButton; // Button to generate random values
+
+    public PatientFrame(VitalSignsData vitalSignsData) {
+        super(); // Call the parent constructor
+        initComponents(); // Initialize GUI components
+
+        // Logic for submitting data
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String patientId = patientIdField.getText();
+                String symptoms = symptomsField.getText();
+                double breathingRate = Double.parseDouble(breathingRateField.getText());
+                double heartRate = Double.parseDouble(heartRateField.getText());
+
+                // Create DatabaseManager instance and insert data
+                DatabaseManager dbManager = new DatabaseManager();
+                dbManager.insertPatientData(patientId, symptoms, breathingRate, heartRate);
+            }
+        });
+
+        // Logic for generating random values
+        generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                double randomBreathingRate = 15 + Math.random() * 10;
+                double randomHeartRate = 60 + Math.random() * 40;
+
+                breathingRateField.setText(String.valueOf(randomBreathingRate));
+                heartRateField.setText(String.valueOf(randomHeartRate));
+            }
+        });
+    }
+
+    // Initialize GUI components
+    private void initComponents() {
+        patientIdField = new JTextField();
+        symptomsField = new JTextField();
+        breathingRateField = new JTextField();
+        heartRateField = new JTextField();
+        submitButton = new JButton("Submit");
+        generateButton = new JButton("Generate Random Values");
+
+        // Set layout and add components to the frame
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        add(new JLabel("Patient ID:"));
+        add(patientIdField);
+        add(new JLabel("Symptoms:"));
+        add(symptomsField);
+        add(new JLabel("Breathing Rate:"));
+        add(breathingRateField);
+        add(new JLabel("Heart Rate:"));
+        add(heartRateField);
+        add(generateButton);  // Add the generate button
+        add(submitButton);  // Add the submit button
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack(); // Adjust the frame size to fit the components
+    }
+
+    @Override
+    public void display() {
+        setVisible(true); // Display the frame
+    }
+}
+
+
+
+
+/*package forms;
+
+import main.HealthFrame;
 import main.VitalSignsData; // Ensure you have this import
 import main.DatabaseManager; // Make sure this import exists for DatabaseManager
 import javax.swing.*;
@@ -65,7 +151,7 @@ public class PatientFrame extends HealthFrame {
 
     }
 }
-
+*/
 
 
 
