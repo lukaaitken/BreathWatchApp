@@ -152,7 +152,7 @@ public class LoginForm extends JDialog {
         setVisible(true);
     }
 
-    private void authenticateUser() {
+    /*private void authenticateUser() {
         String username = txtUsername.getText();
         String password = new String(txtPassword.getPassword());
 
@@ -168,7 +168,25 @@ public class LoginForm extends JDialog {
             txtUsername.setText("");
             txtPassword.setText("");
         }
+    }*/
+    private void authenticateUser() {
+        String username = txtUsername.getText();
+        String password = new String(txtPassword.getPassword());
+
+        // Simple authentication logic
+        if ("patient".equals(username) && "patient123".equals(password)) {
+            authenticatedUser = new User("patient", username); // Store authenticated user and username
+            dispose(); // Close the dialog on successful login
+        } else if ("clinician".equals(username) && "clinician123".equals(password)) {
+            authenticatedUser = new User("clinician", username); // Store authenticated user and username
+            dispose(); // Close the dialog on successful login
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid username or password.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            txtUsername.setText("");
+            txtPassword.setText("");
+        }
     }
+
 
     // Method to get the authenticated user
     public User getAuthenticatedUser() {

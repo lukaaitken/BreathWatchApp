@@ -31,13 +31,21 @@ public class BreathWatchApp {
 
         // Determine which frame to display based on user role
         if ("patient".equals(role)) {
+            healthFrame = new PatientFrame(data, authenticatedUser.getUsername()); // Pass username to PatientFrame
+        } else if ("clinician".equals(role)) {
+            healthFrame = new ClinicianFrame(data); // Pass data to ClinicianFrame
+        }else {
+            System.out.println("Invalid role. Exiting.");
+            return;
+        }
+        /*if ("patient".equals(role)) {
             healthFrame = new PatientFrame(data); // Pass data to PatientFrame
         } else if ("clinician".equals(role)) {
             healthFrame = new ClinicianFrame(data); // Pass data to ClinicianFrame
         } else {
             System.out.println("Invalid role. Exiting.");
             return;
-        }
+        }*/
 
         healthFrame.display(); // Display the selected frame
     }
@@ -51,8 +59,25 @@ public class BreathWatchApp {
             data.addHeartRate(heartRate); // Add to VitalSignsData
         }
     }
-
     public static class User {
+        private String userType;
+        private String username; // Add username field
+
+        public User(String userType, String username) {
+            this.userType = userType;
+            this.username = username; // Set the username
+        }
+
+        public String getUserType() {
+            return userType;
+        }
+
+        public String getUsername() {
+            return username; // Return the username
+        }
+    }
+
+    /*public static class User {
         private String userType;
 
         public User(String userType) {
@@ -62,7 +87,7 @@ public class BreathWatchApp {
         public String getUserType() {
             return userType;
         }
-    }
+    }*/
 }
 
 /*package main;

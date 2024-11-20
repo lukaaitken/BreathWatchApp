@@ -17,7 +17,43 @@ public class PatientFrame extends HealthFrame {
     private JButton submitButton; // Button for submitting data
     private JButton generateButton; // Button to generate random values
 
-    public PatientFrame(VitalSignsData vitalSignsData) {
+    public PatientFrame(VitalSignsData vitalSignsData, String username) {
+        super(); // Call the parent constructor
+        initComponents(); // Initialize GUI components
+
+        // Set the patient ID field to the username
+        patientIdField.setText(username); // Set the username as the patient ID
+        patientIdField.setEditable(false); // Make it non-editable
+
+        // Logic for submitting data
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String patientId = patientIdField.getText();
+                String symptoms = symptomsField.getText();
+                double breathingRate = Double.parseDouble(breathingRateField.getText());
+                double heartRate = Double.parseDouble(heartRateField.getText());
+
+                // Create DatabaseManager instance and insert data
+                DatabaseManager dbManager = new DatabaseManager();
+                dbManager.insertPatientData(patientId, symptoms, breathingRate, heartRate);
+            }
+        });
+
+        // Logic for generating random values
+        generateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                double randomBreathingRate = 15 + Math.random() * 10;
+                double randomHeartRate = 60 + Math.random() * 40;
+
+                breathingRateField.setText(String.valueOf(randomBreathingRate));
+                heartRateField.setText(String.valueOf(randomHeartRate));
+            }
+        });
+    }
+
+    /*public PatientFrame(VitalSignsData vitalSignsData) {
         super(); // Call the parent constructor
         initComponents(); // Initialize GUI components
 
@@ -47,7 +83,7 @@ public class PatientFrame extends HealthFrame {
                 heartRateField.setText(String.valueOf(randomHeartRate));
             }
         });
-    }
+    }*/
 
     // Initialize GUI components
     private void initComponents() {
