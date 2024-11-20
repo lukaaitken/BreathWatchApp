@@ -48,6 +48,17 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
+    public void clearDatabase() {
+        String sql = "DELETE FROM PatientData"; // SQL query to delete all rows
+
+        try (Connection conn = connect(); Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql); // Execute the SQL statement to delete all data
+            System.out.println("All patient data has been deleted.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
