@@ -5,6 +5,7 @@ import main.VitalSignsData;
 import main.DatabaseManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -37,8 +38,38 @@ public class PatientFrame extends HealthFrame {
                 // Create DatabaseManager instance and insert data
                 DatabaseManager dbManager = new DatabaseManager();
                 dbManager.insertPatientData(patientId, symptoms, breathingRate, heartRate);
+
+                // Example check for abnormal values
+                StringBuilder alertMessage = new StringBuilder();
+
+                if (breathingRate < 10 || breathingRate > 30) {
+                    alertMessage.append("Abnormal Breathing Rate: " + breathingRate + "\n");
+                }
+                if (heartRate < 50 || heartRate > 120) {
+                    alertMessage.append("Abnormal Heart Rate: " + heartRate + "\n");
+                }
+
+                // If there are any abnormal conditions, show an alert
+                if (alertMessage.length() > 0) {
+                    showAlert(alertMessage.toString());
+                }
             }
         });
+
+
+        /*submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String patientId = patientIdField.getText();
+                String symptoms = symptomsField.getText();
+                double breathingRate = Double.parseDouble(breathingRateField.getText());
+                double heartRate = Double.parseDouble(heartRateField.getText());
+
+                // Create DatabaseManager instance and insert data
+                DatabaseManager dbManager = new DatabaseManager();
+                dbManager.insertPatientData(patientId, symptoms, breathingRate, heartRate);
+            }
+        });*/
 
         // Logic for generating random values
         generateButton.addActionListener(new ActionListener() {
@@ -52,37 +83,49 @@ public class PatientFrame extends HealthFrame {
             }
         });
     }
+    private void showAlert(String message) {
+        // Create a new dialog for the alert
+        JDialog alertDialog = new JDialog(this, "Alert", true); // 'true' makes it modal
+        alertDialog.setLayout(new BorderLayout());
 
-    /*public PatientFrame(VitalSignsData vitalSignsData) {
-        super(); // Call the parent constructor
-        initComponents(); // Initialize GUI components
+        // Create a JTextArea to display the alert message (allows multiple lines)
+        JTextArea alertTextArea = new JTextArea();
+        alertTextArea.setText(message);
+        alertTextArea.setForeground(Color.RED); // Red text color
+        alertTextArea.setFont(new Font("Arial", Font.BOLD, 14)); // Font and size
+        alertTextArea.setBackground(Color.YELLOW); // Background color for the alert
+        alertTextArea.setEditable(false); // Make it non-editable
+        alertTextArea.setWrapStyleWord(true); // Ensure words are wrapped properly
+        alertTextArea.setLineWrap(true); // Enable line wrapping
 
-        // Logic for submitting data
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String patientId = patientIdField.getText();
-                String symptoms = symptomsField.getText();
-                double breathingRate = Double.parseDouble(breathingRateField.getText());
-                double heartRate = Double.parseDouble(heartRateField.getText());
+        // Make sure the JTextArea doesn't resize unnecessarily
+        alertTextArea.setPreferredSize(new Dimension(280, 100));
 
-                // Create DatabaseManager instance and insert data
-                DatabaseManager dbManager = new DatabaseManager();
-                dbManager.insertPatientData(patientId, symptoms, breathingRate, heartRate);
-            }
-        });
+        // Add the JTextArea to a scroll pane in case the message is too long
+        JScrollPane scrollPane = new JScrollPane(alertTextArea);
 
-        // Logic for generating random values
-        generateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                double randomBreathingRate = 15 + Math.random() * 10;
-                double randomHeartRate = 60 + Math.random() * 40;
+        // Create a close button for the dialog
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(e -> alertDialog.dispose()); // Close the dialog when clicked
 
-                breathingRateField.setText(String.valueOf(randomBreathingRate));
-                heartRateField.setText(String.valueOf(randomHeartRate));
-            }
-        });
+        // Add components to the dialog
+        alertDialog.add(scrollPane, BorderLayout.CENTER); // Add the scrollable message
+        alertDialog.add(closeButton, BorderLayout.SOUTH); // Add the close button at the bottom
+
+        // Set the size and position of the dialog
+        alertDialog.setSize(300, 150);
+        alertDialog.setLocationRelativeTo(this); // Center it relative to the main frame
+
+        // Make the dialog visible
+        alertDialog.setVisible(true);
+    }
+
+
+
+    /*
+    private void showAlert(String message) {
+        // Display alert message to the patient
+        JOptionPane.showMessageDialog(this, message, "Alert", JOptionPane.WARNING_MESSAGE);
     }*/
 
     // Initialize GUI components

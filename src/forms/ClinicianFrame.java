@@ -50,6 +50,47 @@ public class ClinicianFrame extends HealthFrame {
         UserDataManager dbManager = new UserDataManager();
         try (ResultSet rs = dbManager.fetchAllPatientData()) {
             while (rs.next()) {
+                // Get the data from the ResultSet
+                String patientId = rs.getString("patient_id");
+                String symptoms = rs.getString("symptoms");
+                double breathingRate = rs.getDouble("breathing_rate");
+                double heartRate = rs.getDouble("heart_rate");
+                String timestamp = rs.getString("timestamp");
+
+                // Display the patient data
+                patientDataArea.append("Patient ID: " + patientId + "\n");
+                patientDataArea.append("Symptoms: " + symptoms + "\n");
+                patientDataArea.append("Breathing Rate: " + breathingRate + "\n");
+                patientDataArea.append("Heart Rate: " + heartRate + "\n");
+                patientDataArea.append("Timestamp: " + timestamp + "\n");
+                patientDataArea.append("------------------------------\n");
+
+                // Example check for abnormal values
+                if (breathingRate < 10 || breathingRate > 30) {
+                    showAlert(patientId, "Abnormal Breathing Rate: " + breathingRate);
+                }
+                if (heartRate < 50 || heartRate > 120) {
+                    showAlert(patientId, "Abnormal Heart Rate: " + heartRate);
+                }
+            }
+        } catch (SQLException e) {
+            patientDataArea.setText("Error fetching patient data: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(String patientId, String message) {
+        // Display alert message to the clinician
+        JOptionPane.showMessageDialog(this, "Patient ID: " + patientId + "\n" + message, "Alert", JOptionPane.WARNING_MESSAGE);
+    }
+
+    /*
+    private void fetchPatientData() {
+        patientDataArea.setText("Fetching patient data...\n");
+
+        // Fetch all data ordered by timestamp
+        UserDataManager dbManager = new UserDataManager();
+        try (ResultSet rs = dbManager.fetchAllPatientData()) {
+            while (rs.next()) {
                 // Get the data from the ResultSet and display it in the JTextArea
                 String patientId = rs.getString("patient_id");
                 String symptoms = rs.getString("symptoms");
@@ -68,7 +109,7 @@ public class ClinicianFrame extends HealthFrame {
         } catch (SQLException e) {
             patientDataArea.setText("Error fetching patient data: " + e.getMessage());
         }
-    }
+    }*/
 
     @Override
     public void display() {
