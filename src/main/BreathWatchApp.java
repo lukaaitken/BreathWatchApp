@@ -45,7 +45,6 @@ public class BreathWatchApp {
 
         healthFrame.display(); // Display the selected frame
     }
-
     private static void simulateVitalSigns(VitalSignsData data) {
         for (int i = 0; i < 10; i++) {
             double breathingRate = 15 + Math.random() * 10; // Simulate a breathing rate
@@ -55,7 +54,6 @@ public class BreathWatchApp {
             data.addHeartRate(heartRate); // Add to VitalSignsData
         }
     }
-
     public static class User {
         private String userType;
         private String username; // Add username field

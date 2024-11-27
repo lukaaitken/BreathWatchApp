@@ -52,10 +52,10 @@ public class LoginForm extends JDialog {
         String password = new String(txtPassword.getPassword());
 
         // Simple authentication logic
-        if ("patient".equals(username) && "patient123".equals(password)) {
+        if ("patient".equals(username) && "123".equals(password)) {
             authenticatedUser = new User("patient", username); // Store authenticated user and username
             dispose(); // Close the dialog on successful login
-        } else if ("clinician".equals(username) && "clinician123".equals(password)) {
+        } else if ("clinician".equals(username) && "123".equals(password)) {
             authenticatedUser = new User("clinician", username); // Store authenticated user and username
             dispose(); // Close the dialog on successful login
         } else {
