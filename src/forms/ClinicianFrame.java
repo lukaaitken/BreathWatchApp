@@ -17,6 +17,7 @@ public class ClinicianFrame extends HealthFrame {
         super(); // Call the parent constructor
         initComponents(); // Initialize GUI components
         setSize(900, 700);
+        setVisible(true); // Make sure the frame is visible before fetching data
         fetchPatientData(); // Fetch and display patient data initially
     }
 
@@ -48,39 +49,64 @@ public class ClinicianFrame extends HealthFrame {
 
         // Fetch all data ordered by timestamp
         UserDataManager dbManager = new UserDataManager();
-        try (ResultSet rs = dbManager.fetchAllPatientData()) {
-            while (rs.next()) {
-                // Get the data from the ResultSet
-                String patientId = rs.getString("patient_id");
-                String symptoms = rs.getString("symptoms");
-                double breathingRate = rs.getDouble("breathing_rate");
-                double heartRate = rs.getDouble("heart_rate");
-                String timestamp = rs.getString("timestamp");
 
-                // Display the patient data
-                patientDataArea.append("Patient ID: " + patientId + "\n");
-                patientDataArea.append("Symptoms: " + symptoms + "\n");
-                patientDataArea.append("Breathing Rate: " + breathingRate + "\n");
-                patientDataArea.append("Heart Rate: " + heartRate + "\n");
-                patientDataArea.append("Timestamp: " + timestamp + "\n");
-                patientDataArea.append("------------------------------\n");
+        // Use SwingWorker to fetch data asynchronously
+        SwingWorker<Void, String> worker = new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try (ResultSet rs = dbManager.fetchAllPatientData()) {
+                    while (rs.next()) {
+                        // Get the data from the ResultSet
+                        String patientId = rs.getString("patient_id");
+                        String symptoms = rs.getString("symptoms");
+                        double breathingRate = rs.getDouble("breathing_rate");
+                        double heartRate = rs.getDouble("heart_rate");
+                        String timestamp = rs.getString("timestamp");
 
-                // Example check for abnormal values
-                if (breathingRate < 10 || breathingRate > 30) {
-                    showAlert(patientId, "Abnormal Breathing Rate: " + breathingRate);
+                        // Update the JTextArea with the patient data
+                        publish("Patient ID: " + patientId);
+                        publish("Symptoms: " + symptoms);
+                        publish("Breathing Rate: " + breathingRate);
+                        publish("Heart Rate: " + heartRate);
+                        publish("Timestamp: " + timestamp);
+                        publish("------------------------------");
+
+                        // Example check for abnormal values
+                        if (breathingRate < 10 || breathingRate > 30) {
+                            showAlert(patientId, "Abnormal Breathing Rate: " + breathingRate);
+                        }
+                        if (heartRate < 50 || heartRate > 120) {
+                            showAlert(patientId, "Abnormal Heart Rate: " + heartRate);
+                        }
+                    }
+                } catch (SQLException e) {
+                    publish("Error fetching patient data: " + e.getMessage());
                 }
-                if (heartRate < 50 || heartRate > 120) {
-                    showAlert(patientId, "Abnormal Heart Rate: " + heartRate);
+                return null;
+            }
+
+            @Override
+            protected void process(java.util.List<String> chunks) {
+                for (String text : chunks) {
+                    patientDataArea.append(text + "\n"); // Update the text area with the data
                 }
             }
-        } catch (SQLException e) {
-            patientDataArea.setText("Error fetching patient data: " + e.getMessage());
-        }
+
+            @Override
+            protected void done() {
+                // Called when the worker is done
+                // You can show a final message or additional logic here if needed
+            }
+        };
+
+        // Start the background task
+        worker.execute();
     }
 
     private void showAlert(String patientId, String message) {
         // Display alert message to the clinician
-        JOptionPane.showMessageDialog(this, "Patient ID: " + patientId + "\n" + message, "Alert", JOptionPane.WARNING_MESSAGE);
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this,
+                "Patient ID: " + patientId + "\n" + message, "Alert", JOptionPane.WARNING_MESSAGE));
     }
 
     @Override
