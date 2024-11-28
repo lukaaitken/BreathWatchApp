@@ -4,16 +4,16 @@ import javax.swing.*;
 import forms.LoginForm;
 import forms.PatientFrame;
 import forms.ClinicianFrame;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BreathWatchApp {
     public static void main(String[] args) {
         // Set up the application icon in the taskbar
         ImageIcon icon = new ImageIcon("src/images/BreathWatchLogo2.png");
-
-        //TO CLEAN ROWS ON DATABASE
-        /*DatabaseManager dbManager = new DatabaseManager();
-        // Call clearDatabase to delete all records
-        dbManager.clearDatabase();*/
 
         // Show login form
         LoginForm loginForm = new LoginForm(null); // Use 'null' for the parent frame if not required

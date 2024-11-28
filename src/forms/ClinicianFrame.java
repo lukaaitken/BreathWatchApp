@@ -16,6 +16,7 @@ public class ClinicianFrame extends HealthFrame {
     public ClinicianFrame(VitalSignsData vitalSignsData) {
         super(); // Call the parent constructor
         initComponents(); // Initialize GUI components
+        setTitle("BreathWatch - Clinician");
         setSize(900, 700);
         setVisible(true); // Make sure the frame is visible before fetching data
         fetchPatientData(); // Fetch and display patient data initially

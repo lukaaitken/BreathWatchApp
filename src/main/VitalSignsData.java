@@ -64,4 +64,13 @@ public class VitalSignsData {
     public List<Double> getHeartRates() {
         return heartRates;
     }
+    // In VitalSignsData class
+    public double getAverageBreathingRate() {
+        return breathingRates.isEmpty() ? 0 : breathingRates.stream().mapToDouble(Double::doubleValue).average().orElse(0);
+    }
+
+    public double getAverageHeartRate() {
+        return heartRates.isEmpty() ? 0 : heartRates.stream().mapToDouble(Double::doubleValue).average().orElse(0);
+    }
+
 }
