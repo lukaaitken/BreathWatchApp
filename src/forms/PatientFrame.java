@@ -21,7 +21,7 @@ public class PatientFrame extends HealthFrame {
     public PatientFrame(VitalSignsData vitalSignsData, String username) {
         super(); // Call the parent constructor
         initComponents(); // Initialize GUI components
-
+        setSize(700, 400);
         // Set the patient ID field to the username
         patientIdField.setText(username); // Set the username as the patient ID
         patientIdField.setEditable(false); // Make it non-editable
