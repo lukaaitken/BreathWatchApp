@@ -1,6 +1,9 @@
 package main;
 
+import forms.ClinicianFrame;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class VitalSignsData {
@@ -64,7 +67,7 @@ public class VitalSignsData {
     public List<Double> getHeartRates() {
         return heartRates;
     }
-    // In VitalSignsData class
+
     public double getAverageBreathingRate() {
         return breathingRates.isEmpty() ? 0 : breathingRates.stream().mapToDouble(Double::doubleValue).average().orElse(0);
     }
@@ -73,4 +76,32 @@ public class VitalSignsData {
         return heartRates.isEmpty() ? 0 : heartRates.stream().mapToDouble(Double::doubleValue).average().orElse(0);
     }
 
+    // Inner class for iterator
+    private class VitalSignsIterator implements Iterator<Double> {
+        private final List<Double> list;
+        private int position = 0;
+
+        public VitalSignsIterator(List<Double> list) {
+            this.list = list;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return position < list.size();
+        }
+
+        @Override
+        public Double next() {
+            return list.get(position++);
+        }
+    }
+
+    // Methods to get iterators
+    public Iterator<Double> getBreathingRateIterator() {
+        return new VitalSignsIterator(breathingRates);
+    }
+
+    public Iterator<Double> getHeartRateIterator() {
+        return new VitalSignsIterator(heartRates);
+    }
 }
