@@ -56,5 +56,6 @@ BreathWatch is designed to provide automated respiratory monitoring for both pat
 ## Project Information
 **Course**: SENG 4130 Final Project  
 **Project Name**: BreathWatch - Automated Respiratory Monitoring System
-**Authors**: Luka Aitken & Toma Aitken
 
+## Authors
+**Luka Aitken & Toma Aitken**
