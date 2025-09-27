@@ -3,6 +3,8 @@
 ## Project Overview
 BreathWatch is an automated respiratory monitoring system designed to track patient breathing and heart rate data. The system supports two types of user accounts: **Patient** and **Clinician**. Patients can enter symptoms and view their vital signs, while clinicians can access data from all patients and monitor for abnormal readings.
 
+📺 Demo Video: [Watch Here](https://youtu.be/1jmbks2Ugpk?si=qsUa-_T3uUUc8SCP)
+
 ## Setup Instructions
 
 ### 1. Download and Open the Project
